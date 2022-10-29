@@ -3,8 +3,11 @@ import type { ConfigOptions as Web3ModalConfig } from "@web3modal/core"
 import type { AppProps } from "next/app"
 import "../styles/globals.css"
 
+const WALLETCONNECT_PROJECTID = process.env
+  .NEXT_PUBLIC_WALLETCONNECT_PROJECTID as string
+
 const web3modalConfig: Web3ModalConfig = {
-  projectId: "36b858dbfae75926d108c610e4873316",
+  projectId: WALLETCONNECT_PROJECTID,
   theme: "dark",
   accentColor: "default",
   ethereum: {

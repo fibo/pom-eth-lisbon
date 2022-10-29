@@ -12,7 +12,9 @@
     "@web3modal/ethereum": "^2.0.0-beta.1",
     "@web3modal/react": "^2.0.0-beta.1",
     "ethers": "^5.7.2",
+    "ipfs-http-client": "^59.0.0",
     "next": "13.0.0",
+    "qrcode-generator": "^1.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
