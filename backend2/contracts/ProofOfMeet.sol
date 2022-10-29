@@ -10,10 +10,13 @@ contract ProofOfMeet {
   mapping(address=>mapping(address=>IAccount)) multiSigs;
 
   event Approved(address sender, address receiver);
-  
-  function meet(address receiver, bytes32 _aaBytecodeHash, string calldata metadata) external {
-    bytes32 salt = bytes32(0);
+
+  constructor(bytes32 _aaBytecodeHash) {
     aaBytecodeHash = _aaBytecodeHash;
+  }
+  
+  function meet(address receiver, string calldata metadata) external {
+    bytes32 salt = bytes32(0);
 
     address accountAddress = deployAccount(salt, msg.sender, receiver);
     multiSigs[msg.sender][receiver] = IAccount(accountAddress);
