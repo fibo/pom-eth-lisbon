@@ -1,4 +1,5 @@
 import { create, CID } from "ipfs-http-client"
+import qrcode from "qrcode-generator"
 import { useCallback, useEffect, useRef, useState } from "react"
 import styles from "../styles/imagePreview.module.css"
 
@@ -8,6 +9,7 @@ const INFURA_APISECRET = process.env.NEXT_PUBLIC_INFURA_APISECRET
 const CreatePage = () => {
   const imagePreviewRef = useRef(null)
   const ipfsRef = useRef(null)
+  const qrcodeDivRef = useRef(null)
 
   const [hasImage, setHasImage] = useState(false)
   const [uploadedImage, setUploadedImage] = useState(null)
@@ -52,6 +54,21 @@ const CreatePage = () => {
     }
   }, [ipfsRef])
 
+  useEffect(() => {
+    if (!qrcodeDivRef.current) return
+    if (!uploadedImage) return
+    const pomUrl = `${window.location.origin}/pom/${uploadedImage.path}`
+    const typeNumber = 0
+    const errorCorrectionLevel = "L"
+    const qr = qrcode(typeNumber, errorCorrectionLevel)
+    qr.addData(pomUrl)
+    qr.make()
+    qrcodeDivRef.current.innerHTML = qr.createSvgTag({
+      scalable: true,
+      cellSize: 4,
+    })
+  }, [qrcodeDivRef, uploadedImage])
+
   return (
     <>
       <form onSubmit={onSubmitImage}>
@@ -62,6 +79,7 @@ const CreatePage = () => {
         hidden={!hasImage}
         className={styles.preview}
       />
+      <div ref={qrcodeDivRef}></div>
     </>
   )
 }
