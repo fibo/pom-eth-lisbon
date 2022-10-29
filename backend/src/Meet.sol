@@ -20,7 +20,7 @@ contract Meet {
   }
 
   //check if the input message sender is correct for this modifier verification
-  function getMetadata() external isOwner(msg.sender) returns (string memory){
+  function getMetadata() external view isOwner(msg.sender) returns (string memory){
     return metadata;
   }
 }
