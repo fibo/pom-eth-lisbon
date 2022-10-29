@@ -88,7 +88,7 @@ contract TwoUserMultisig is IAccount, IERC1271 {
                 to, 
                 uint128(_transaction.reserved[1]),
                 _transaction.data
-            )
+            );
         } else {
             bool success;
             assembly {
