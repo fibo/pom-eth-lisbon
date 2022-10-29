@@ -18,14 +18,25 @@ npm install
 
 ### WalletConnect
 
-Create a [WalletConnect](https://walletconnect.com/) project: sign in to your [WalletConnect Dashboard](https://cloud.walletconnect.com/), create a project and copy the *project ID*. Then use it for the `WALLETCONNECT_PROJECTID` environment variable.
+Create a [WalletConnect](https://walletconnect.com/) project: sign in to your [WalletConnect Dashboard](https://cloud.walletconnect.com/), create a project and copy the *project ID*. Then use it for the `NEXT_PUBLIC_WALLETCONNECT_PROJECTID` environment variable.
+
+### Infura
+
+Create a new project on [Infura](https://infura.io/), choose *IPFS* as network. Create a dedicated Gateway. Get *project id* and *API key secret* and use these three info to populate environment variables
+
+* `NEXT_PUBLIC_INFURA_PROJECTID`
+* `NEXT_PUBLIC_INFURA_APISECRET`
+* `NEXT_PUBLIC_INFURA_GATEWAY`
 
 ### Environment variables
 
 Create a *.env.local* file in this folder with a content like the following
 
 ```
-WALLETCONNECT_PROJECTID=xxx
+NEXT_INFURA_PROJECTID=xxx
+NEXT_INFURA_APISECRET=xxx
+NEXT_INFURA_GATEWAY=pom-eth-lisbon
+NEXT_WALLETCONNECT_PROJECTID=xxx
 ```
 
 ### Start local server
