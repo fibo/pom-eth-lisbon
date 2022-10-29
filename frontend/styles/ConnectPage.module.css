@@ -1,0 +1,11 @@
+.emojiList {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border: 1px solid;
+}
+
+.emoji {
+  cursor: default;
+  font-size: 2em;
+}

@@ -27,3 +27,15 @@
   padding-inline: 1em;
   padding-block: 0.4em;
 }
+
+.emoji {
+  font-size: 2em;
+  line-height: 2em;
+}
+
+.emojiContainer {
+  border: 1px solid gray;
+  border-radius: 2em;
+  width: 4em;
+  text-align: center;
+}
