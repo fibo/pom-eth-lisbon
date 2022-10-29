@@ -1,19 +1,16 @@
-import Head from "next/head"
+import Link from "next/link"
+import { Content } from "_components"
 
 export default function HomePage() {
   return (
-    <>
-      <Head>
-        <title>proof of meet</title>
-        <meta name="description" content="Hello, world! Let’s meet 🥩" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+    <Content>
       <p>
         Hello, world!
         <br />
         Let’s meet 🥩
       </p>
-    </>
+
+      <Link href="/create">create</Link>
+    </Content>
   )
 }
