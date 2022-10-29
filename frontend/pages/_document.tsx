@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document"
+import Script from "next/script"
 
 export default function Document() {
   return (
@@ -11,7 +12,7 @@ export default function Document() {
           type="image/svg+xml"
         />
 
-        <script src="https://js.pusher.com/7.2.0/pusher.min.js"></script>
+        <Script src="https://js.pusher.com/7.2.0/pusher.min.js"></Script>
       </Head>
       <body>
         <Main />
