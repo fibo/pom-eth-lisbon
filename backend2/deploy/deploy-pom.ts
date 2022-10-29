@@ -16,7 +16,7 @@ export default async function (hre: HardhatRuntimeEnvironment) {
   console.log("4");
   // Deposit some funds to L2 in order to be able to perform L2 transactions.
   // You can remove the depositing step if the `wallet` has enough funds on zkSync
-  const depositAmount = ethers.utils.parseEther("0.01");
+  const depositAmount = ethers.utils.parseEther("0.005");
   console.log("5");
   const depositHandle = await deployer.zkWallet.deposit({
     to: deployer.zkWallet.address,
