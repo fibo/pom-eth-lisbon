@@ -1,9 +1,10 @@
 .container {
-  background: gainsboro;
+  background: black;
+  border: 1px solid black;
   width: 100%;
 }
 
 .progress {
-  background: teal;
-  height: 7px;
+  background: magenta;
+  height: 4px;
 }

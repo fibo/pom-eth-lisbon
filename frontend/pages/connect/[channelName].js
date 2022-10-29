@@ -35,6 +35,7 @@ const ConnectPage = () => {
 
   return (
     <>
+      <p>Ask to see your connection code</p>
       <ConnectButton />
 
       <div className={styles.emojiList}>

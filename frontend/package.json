@@ -16,6 +16,7 @@
     "nanoid": "^4.0.0",
     "next": "13.0.0",
     "pusher": "^5.1.1-beta",
+    "pusher-js": "^7.4.0",
     "qrcode-generator": "^1.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"

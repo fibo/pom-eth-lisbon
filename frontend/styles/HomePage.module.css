@@ -1,0 +1,41 @@
+.container{
+  display:flex;
+  flex-direction: column;
+  border:1px solid;
+  height: 100vh;
+  justify-content: space-between;
+}
+
+.hero {
+  background: linear-gradient(171deg, rgb(189 96 208) 17%, rgb(252 244 255) 71%);
+  padding-inline: 1.7em;
+  display:flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-around;
+  height: 100%;
+}
+
+.heroText {
+  font-size: 3em;
+  color: white;
+  font-weight: bold;
+}
+
+.callToAction {
+  font-size: 1em;
+  font-weight: medium;
+  border: 1px solid;
+  line-height: 3em;
+  text-decoration: none;
+  border-radius: 2em;
+  background-color: rgb(236,0,118);
+  color: white;
+}
+
+.footer {
+  padding-block: 2em;
+  padding-inline: 1em;
+  background-color: rgb(242, 245, 245);
+  text-align: center;
+}
