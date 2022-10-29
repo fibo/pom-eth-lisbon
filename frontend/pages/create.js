@@ -1,18 +1,27 @@
 import { create, CID } from "ipfs-http-client"
 import qrcode from "qrcode-generator"
 import { useCallback, useEffect, useRef, useState } from "react"
-import styles from "../styles/imagePreview.module.css"
+import { ProgressBar } from "_components"
+import imageStyles from "../styles/image.module.css"
+import styles from "../styles/CreatePage.module.css"
 
 const INFURA_PROJECTID = process.env.NEXT_PUBLIC_INFURA_PROJECTID
 const INFURA_APISECRET = process.env.NEXT_PUBLIC_INFURA_APISECRET
 
 const CreatePage = () => {
   const imagePreviewRef = useRef(null)
+  const inputFileRef = useRef(null)
   const ipfsRef = useRef(null)
   const qrcodeDivRef = useRef(null)
 
   const [hasImage, setHasImage] = useState(false)
   const [uploadedImage, setUploadedImage] = useState(null)
+
+  const onClickTakePhoto = useCallback(() => {
+    const inputFile = inputFileRef.current
+    if (!inputFile) return
+    inputFile.click()
+  }, [inputFileRef])
 
   const onChangeImage = useCallback(
     async (event) => {
@@ -71,15 +80,42 @@ const CreatePage = () => {
 
   return (
     <>
-      <form onSubmit={onSubmitImage}>
-        <input type="file" accept="image/*" capture onChange={onChangeImage} />
-      </form>
-      <img
-        ref={imagePreviewRef}
-        hidden={!hasImage}
-        className={styles.preview}
-      />
-      <div ref={qrcodeDivRef}></div>
+      <ProgressBar completed={25} />
+
+      <h1 className={styles.title}>Create new POM</h1>
+
+      <div className={styles.container}>
+        <form className={styles.imageForm} onSubmit={onSubmitImage}>
+          <label className={styles.placeLabel} htmlFor="place">
+            Where are you at?
+          </label>
+          <input
+            className={styles.placeInput}
+            type="text"
+            placeholder="Event, location"
+          />
+
+          <input
+            ref={inputFileRef}
+            type="file"
+            accept="image/*"
+            capture
+            onChange={onChangeImage}
+            hidden
+          />
+          <button onClick={onClickTakePhoto} hidden={hasImage}>
+            take photo
+          </button>
+        </form>
+
+        <img
+          ref={imagePreviewRef}
+          hidden={!hasImage}
+          className={imageStyles.preview}
+        />
+
+        <div ref={qrcodeDivRef}></div>
+      </div>
     </>
   )
 }

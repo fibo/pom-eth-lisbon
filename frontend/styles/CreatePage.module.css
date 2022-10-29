@@ -1,0 +1,29 @@
+.title {
+  font-size: 1em;
+  text-align: center;
+}
+
+.container {
+  padding-inline: 20px;
+  display: flex;
+  border: 1px solid;
+  padding-block: 4em;
+  flex-direction: column;
+}
+
+.imageForm {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.placeLabel {
+  font-size: 2.5em;
+  text-align: center;
+}
+
+.placeInput {
+  font-size: 1.2em;
+  padding-inline: 1em;
+  padding-block: 0.4em;
+}
