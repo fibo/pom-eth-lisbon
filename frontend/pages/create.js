@@ -25,6 +25,8 @@ const CreatePage = () => {
   const ipfsRef = useRef(null)
   const qrcodeDivRef = useRef(null)
 
+  const [showQrCode, setShowQrCode] = useState(false)
+  const [showLocation, setShowLocation] = useState(true)
   const [hasImage, setHasImage] = useState(false)
   const [emojiIsCorrect, setEmojiIsCorrect] = useState()
   console.log("emojiIsCorrect", emojiIsCorrect)
@@ -32,11 +34,24 @@ const CreatePage = () => {
   const [randomEmojiKey, setRandomEmojiKey] = useState(null)
   console.log("uploadedImage", uploadedImage)
 
-  const onClickTakePhoto = useCallback(() => {
+  const onClickNext = useCallback(() => {
+    if (showLocation) {
+    setShowLocation(false)
+    setShowQrCode(true)
+      return
+    }
+    if (showQrCode) {
+    setShowQrCode(false)
     const inputFile = inputFileRef.current
     if (!inputFile) return
     inputFile.click()
-  }, [inputFileRef])
+    }
+  },[
+    inputFileRef,
+    showLocation,
+    showQrCode,
+    setShowQrCode,
+     setShowLocation])
 
   const onChangeImage = useCallback(
     async (event) => {
@@ -56,9 +71,35 @@ const CreatePage = () => {
     [imagePreviewRef, ipfsRef, setHasImage, setUploadedImage]
   )
 
-  const qrCodeIsHidden = useMemo(() => {
-    return emojiIsCorrect
-  }, [emojiIsCorrect])
+  const {completed, labelText, subLabelText, buttonText} = useMemo(() => {
+    if (showLocation) return {
+       completed: 25,
+      buttonText: 'Generate QR code',
+      labelText: 'Where are you at?',
+      subLabelText: "Tell us where you are right now to adequately describe your Proof of Meet"
+    }
+
+    if (showQrCode) return {
+       completed: 50,
+      buttonText: 'Take selfie',
+      labelText: 'Show this code to your new connection',
+      subLabelText: "Scan QR code with the regular camera, or use a WalletConnect-compatible wallet"
+    }
+
+    if (hasImage) return {
+       completed: 75,
+      labelText: '',
+      labelText: 'Show this code to your connection',
+      subLabelText: "This step is to ensure you both consent"
+    }
+
+     return {
+       completed: 0,
+      buttonText: '',
+      labelText: '',
+      subLabelText: ""
+    }
+  }, [showLocation, showQrCode,hasImage])
 
   const takePhotoButtonIsHidden = useMemo(() => {
     if (hasImage) return true
@@ -69,10 +110,6 @@ const CreatePage = () => {
     event.preventDefault()
   }, [])
 
-  const completed = useMemo(() => {
-    if (!emojiIsCorrect) return 25
-    if (emojiIsCorrect) return 50
-  }, [emojiIsCorrect])
 
   useEffect(() => {
     const emojiKeys = Object.keys(emoji)
@@ -122,18 +159,22 @@ const CreatePage = () => {
     <>
       <ProgressBar completed={completed} />
 
-      <h1 className={styles.title}>Create new POM</h1>
-
+      <div className={styles.background}>
       <div className={styles.container}>
         <form className={styles.imageForm} onSubmit={onSubmitImage}>
-          <label className={styles.placeLabel} htmlFor="place">
-            Where are you at?
+          <label className={styles.label} htmlFor="place">
+            {labelText}
           </label>
+          <p className={styles.subLabel}>
+            {subLabelText}
+          </p>
+          {showLocation && (
           <input
             className={styles.placeInput}
             type="text"
             placeholder="Event, location"
           />
+          )}
 
           <input
             ref={inputFileRef}
@@ -143,10 +184,16 @@ const CreatePage = () => {
             onChange={onChangeImage}
             hidden
           />
-          <button onClick={onClickTakePhoto} hidden={takePhotoButtonIsHidden}>
-            take photo
-          </button>
-        </form>
+
+
+    {hasImage && (
+        <div  className={styles.connectionCode}>
+
+          <div className={styles.emojiContainer}>
+            <div className={styles.emoji}>{emoji[randomEmojiKey]}</div>
+          </div>
+        </div>
+    )}
 
         <img
           ref={imagePreviewRef}
@@ -154,15 +201,14 @@ const CreatePage = () => {
           className={imageStyles.preview}
         />
 
-        <div ref={qrcodeDivRef} hidden={qrCodeIsHidden}></div>
+        </form>
 
-        <div>
-          <p>connection code</p>
+        <div ref={qrcodeDivRef} className={styles.qrcodeContainer} hidden={!showQrCode}></div>
 
-          <div className={styles.emojiContainer}>
-            <div className={styles.emoji}>{emoji[randomEmojiKey]}</div>
-          </div>
-        </div>
+    {buttonText &&(
+        <button className={styles.next} onClick={onClickNext}>{buttonText}</button>
+    )}
+      </div>
       </div>
     </>
   )

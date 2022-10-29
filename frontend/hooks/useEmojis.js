@@ -3,6 +3,7 @@ export const useEmojis = () => {
     moon: "🌙",
     rocket: "🚀",
     pizza: "🍕",
+    soccer: '⚽',
     unicorn: "🦄",
   }
 

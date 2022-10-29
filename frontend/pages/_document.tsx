@@ -1,5 +1,4 @@
 import { Html, Head, Main, NextScript } from "next/document"
-import Script from "next/script"
 
 export default function Document() {
   return (
@@ -12,7 +11,8 @@ export default function Document() {
           type="image/svg+xml"
         />
 
-        <Script src="https://js.pusher.com/7.2.0/pusher.min.js"></Script>
+        <link rel="preconnect" href="https://rsms.me" crossOrigin="" />
+        <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
       </Head>
       <body>
         <Main />

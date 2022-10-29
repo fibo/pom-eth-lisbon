@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
+import Pusher from 'pusher-js'
 
 const PUSHER_CLUSTER = process.env.NEXT_PUBLIC_PUSHER_CLUSTER
 const PUSHER_KEY = process.env.NEXT_PUBLIC_PUSHER_KEY
