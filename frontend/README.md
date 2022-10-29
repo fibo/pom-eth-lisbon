@@ -16,11 +16,28 @@ Install package depencencies: with [npm](https://www.npmjs.com/) do
 npm install
 ```
 
-### WalletConnect
+### Environment variables
+
+Create a *.env.local* file in this folder with a content like the following.
+
+```
+NEXT_INFURA_PROJECTID=xxx
+NEXT_INFURA_APISECRET=xxx
+NEXT_INFURA_GATEWAY=pom-eth-lisbon
+NEXT_WALLETCONNECT_PROJECTID=xxx
+NEXT_PUBLIC_PUSHER_CLUSTER=xxx
+NEXT_PUBLIC_PUSHER_KEY=xxx
+PUSHER_APPID=xxx
+PUSHER_SECRET=xxx
+```
+
+Read below how to get all the values you need.
+
+#### WalletConnect
 
 Create a [WalletConnect](https://walletconnect.com/) project: sign in to your [WalletConnect Dashboard](https://cloud.walletconnect.com/), create a project and copy the *project ID*. Then use it for the `NEXT_PUBLIC_WALLETCONNECT_PROJECTID` environment variable.
 
-### Infura
+#### Infura
 
 Create a new project on [Infura](https://infura.io/), choose *IPFS* as network. Create a dedicated Gateway. Get *project id* and *API key secret* and use these three info to populate environment variables
 
@@ -28,16 +45,14 @@ Create a new project on [Infura](https://infura.io/), choose *IPFS* as network. 
 * `NEXT_PUBLIC_INFURA_APISECRET`
 * `NEXT_PUBLIC_INFURA_GATEWAY`
 
-### Environment variables
+#### Pusher
 
-Create a *.env.local* file in this folder with a content like the following
+Create a new API key on [Pusher](https://pusher.com/) and set the following environment variables accordingly.
 
-```
-NEXT_INFURA_PROJECTID=xxx
-NEXT_INFURA_APISECRET=xxx
-NEXT_INFURA_GATEWAY=pom-eth-lisbon
-NEXT_WALLETCONNECT_PROJECTID=xxx
-```
+* `NEXT_PUBLIC_PUSHER_CLUSTER`
+* `NEXT_PUBLIC_PUSHER_KEY`
+* `PUSHER_APPID`
+* `PUSHER_SECRET`
 
 ### Start local server
 
