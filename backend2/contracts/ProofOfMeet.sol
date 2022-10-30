@@ -39,7 +39,14 @@ contract ProofOfMeet {
     bytes32 salt = bytes32(0);
 
     address accountAddress = deployAccount(salt, msg.sender, receiver);
-    multiSigs[msg.sender][receiver] = IAccount(accountAddress);
+    IAccount multisig = IAccount(accountAddress);
+    multiSigs[msg.sender][receiver] = multisig;
+
+    //TODO tell multisig to mint Meet.sol 
+    //TODO send metadata to it
+    //TODO maybe we have to also include in the calldata signature
+    bytes32 toCallMint = abi.encode("data to call mint Meet.sol");
+    multisig.executeTransaction(toCallMint);
 
     emit Approved(msg.sender, receiver);
   }
