@@ -42,12 +42,19 @@ const CreatePage = () => {
   const [showQrCode, setShowQrCode] = useState(false)
   const [showLocation, setShowLocation] = useState(true)
   const [showTakeSelfie, setShowTakeSelfie] = useState(false)
+  const [success, setSuccess] = useState(false)
   const [hasImage, setHasImage] = useState(false)
   const [emojiIsCorrect, setEmojiIsCorrect] = useState()
+  console.log('emojiIsCorrect', emojiIsCorrect)
   const [uploadedImage, setUploadedImage] = useState(null)
   const [randomEmojiKey, setRandomEmojiKey] = useState(null)
 
   const onClickNext = useCallback(() => {
+    if (emojiIsCorrect) {
+setSuccess(true)
+      return
+    }
+
     if (showLocation) {
       setShowLocation(false)
       setShowQrCode(true)
@@ -69,10 +76,12 @@ const CreatePage = () => {
     hasImage,
     showLocation,
     showQrCode,
+    setSuccess,
     showTakeSelfie,
     setShowTakeSelfie,
     setShowQrCode,
     setShowLocation,
+    emojiIsCorrect
   ])
 
   const onChangeImage = useCallback(
@@ -95,6 +104,14 @@ const CreatePage = () => {
   )
 
   const { completed, labelText, subLabelText, buttonText } = useMemo(() => {
+    if(success) return {
+        completed: 0,
+        buttonText: "",
+        labelText: "Done!",
+        subLabelText:
+          "",
+    }
+
     if (showLocation)
       return {
         completed: 20,
@@ -113,14 +130,6 @@ const CreatePage = () => {
           "Scan QR code with the regular camera, or use a WalletConnect-compatible wallet",
       }
 
-    if (showTakeSelfie)
-      return {
-        completed: 60,
-        buttonText: "Take selfie",
-        labelText: "Take a picture together",
-        subLabelText: "Smile, it’s gonna live on forever!",
-      }
-
     if (emojiIsCorrect)
       return {
         completed: 100,
@@ -128,6 +137,14 @@ const CreatePage = () => {
         labelText: "Code confirmed!",
         subLabelText:
           "This is the last step. Please double-check the info below is correct",
+      }
+
+    if (showTakeSelfie)
+      return {
+        completed: 60,
+        buttonText: "Take selfie",
+        labelText: "Take a picture together",
+        subLabelText: "Smile, it’s gonna live on forever!",
       }
 
     if (hasImage)
@@ -144,7 +161,7 @@ const CreatePage = () => {
       labelText: "",
       subLabelText: "",
     }
-  }, [emojiIsCorrect, showLocation, showQrCode, hasImage])
+  }, [success,emojiIsCorrect, showLocation, showQrCode, hasImage])
 
   const onChangeInput = useCallback(
     (event) => {
@@ -238,7 +255,7 @@ const CreatePage = () => {
               {labelText}
             </label>
             <p className={styles.subLabel}>{subLabelText}</p>
-            {showLocation && (
+            {showLocation && !success && (
               <input
                 className={styles.placeInput}
                 type="text"
@@ -256,7 +273,7 @@ const CreatePage = () => {
               hidden
             />
 
-            {hasImage && (
+            {hasImage && !success && (
               <div className={styles.connectionCode}>
                 <div
                   className={`${styles.emojiContainer} ${
