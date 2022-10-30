@@ -2,6 +2,8 @@
 
 > proof of meet
 
+Video: [Proof of Meet (POM) - ETHLisbon 2022 Demo](https://www.youtube.com/watch?v=iiVoe7I9BJw)
+
 Demo here: https://pom-eth-lisbon.vercel.app/
 
 ## The problem
