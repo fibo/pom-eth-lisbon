@@ -64,3 +64,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+**NOTA BENE** In a native app we would use Bluetooth as a transport layer to send messages between POM participants. We are using WebSocket as a transport layer since we had only few time and created a webapp, but we found issues with certificates. These issue were hard to spot, they both happen with ceritificate provided by Vercel (online demo) and when we run the webapp locally since MetaMask or WalletConnect only connect wallet if there is a secure connection. See also WalletConnect issue opened: https://github.com/WalletConnect/web3modal/issues/664
+
+To solve the issue, run the server with
+
+```sh
+node server.js
+```
+
+Then connect using local IP, for instance https://10.1.0.241:3000/
+
+You will need to accept certificates.
