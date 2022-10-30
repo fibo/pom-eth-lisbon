@@ -1,5 +1,6 @@
 import { useAccount, useConnectModal } from "@web3modal/react"
 import { FC, useCallback, useMemo } from "react"
+import styles from "../styles/HomePage.module.css"
 
 export const ConnectButton: FC = () => {
   const { account } = useAccount()
@@ -21,8 +22,8 @@ export const ConnectButton: FC = () => {
   }, [isConnected, isConnecting, open])
 
   return (
-    <button hidden={hidden} onClick={onClick}>
-      connect
+    <button className={styles.callToAction} hidden={hidden} onClick={onClick}>
+      <span>Connect Wallet</span>
     </button>
   )
 }
