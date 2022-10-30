@@ -3,9 +3,104 @@
   flex-direction: row;
   justify-content: center;
   gap: 2em;
+  padding-block: 3em;
 }
 
 .emoji {
   cursor: default;
   font-size: 2.5em;
+}
+
+.hero {
+  padding-top: 3em;
+  background: linear-gradient(
+    171deg,
+    rgb(189 96 208) 17%,
+    rgb(235 205 246) 71%
+  );
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.heroMessages {
+  padding-inline: 1.7em;
+}
+
+.heroText {
+  margin-block: 0;
+  font-size: 3em;
+  color: white;
+  font-weight: bold;
+}
+
+.heroSubText {
+  margin-top: 2em;
+  color: black;
+  font-size: 1.2em;
+  line-height: 1.7em;
+}
+
+.logo {
+  padding-inline: 1em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: white;
+  height: fit-content;
+  width: 100%;
+  gap: 1em;
+}
+
+.title {
+  color: black;
+  font-size: 1.75em;
+  font-weight: bold;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid;
+  height: 100vh;
+  justify-content: space-between;
+}
+
+.actionContainerTop {
+  background: white;
+  height: 50px;
+  border-top-left-radius: 35px;
+  border-top-right-radius: 35px;
+}
+
+.actionContainer {
+  display: flex;
+  flex-direction: column;
+  padding-inline: 2em;
+  gap: 1em;
+}
+
+.actionText {
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.actionSubText {
+  text-align: center;
+  color: gray;
+}
+
+.callToAction {
+  font-size: 1em;
+  font-weight: medium;
+  border: 1px solid;
+  line-height: 3em;
+  text-decoration: none;
+  border-radius: 2em;
+  background-color: rgb(236, 0, 118);
+  color: white;
+  margin-bottom: 3em;
 }

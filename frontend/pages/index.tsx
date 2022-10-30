@@ -1,15 +1,25 @@
 import Link from "next/link"
-import { Content } from "_components"
+import { Content, Logo } from "_components"
 import styles from "../styles/HomePage.module.css"
 
 export default function HomePage() {
   return (
     <Content>
       <div className={styles.container}>
+        <div className={styles.logo}>
+          <Logo />
+          <span className={styles.title}>Proof of Meet</span>
+        </div>
         <div className={styles.hero}>
-          <p className={styles.heroText}>
-            Meet, connect, and prove who you’ve met
-          </p>
+          <div>
+            <p className={styles.heroText}>
+              Meet, connect, and prove who you’ve met
+            </p>
+            <p className={styles.heroSubText}>
+              Proof of Meet is a social dapp to easily mint shared moments
+              on-chain and show off your connections to the world
+            </p>
+          </div>
           <Link className={styles.callToAction} href="/create">
             <span>Create new Proof of Meet</span>
           </Link>
