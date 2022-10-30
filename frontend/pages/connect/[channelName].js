@@ -1,19 +1,35 @@
-import { useAccount } from "@web3modal/react"
+import { useAccount, useConnectModal } from "@web3modal/react"
 import { useRouter } from "next/router"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { ConnectButton, Logo, Spinner } from "_components"
 import { useEmojis } from "../../hooks/useEmojis"
 import { usePusher } from "../../hooks/usePusher"
 import styles from "../../styles/ConnectPage.module.css"
+import homeStyles from "../../styles/HomePage.module.css"
 
 const ConnectPage = () => {
   const router = useRouter()
   const { channelName } = router.query
 
   const { account } = useAccount()
+  const { open } = useConnectModal()
 
   const [emojiKey, setEmojiKey] = useState()
   const [hasImage, setHasImage] = useState(false)
+
+  const { isConnected, isConnecting } = useMemo(() => account, [account])
+
+  const onClick = useCallback(() => {
+    if (isConnected) return
+    if (isConnecting) return
+    open()
+  }, [isConnected, isConnecting, open])
+
+  const hidden = useMemo(() => {
+    if (isConnected === undefined) return true
+    if (isConnecting) return true
+    return isConnected
+  }, [isConnected, isConnecting])
 
   const { emoji } = useEmojis()
 
@@ -86,7 +102,13 @@ const ConnectPage = () => {
               </p>
             </>
           )}
+
+          {/*
           <ConnectButton />
+          */}
+    <button className={homeStyles.callToAction} hidden={hidden} onClick={onClick}>
+      <span>Connect Wallet</span>
+    </button>
 
           {account.isConnected && (
             <div className={styles.connected}>
