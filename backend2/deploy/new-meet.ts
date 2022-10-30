@@ -8,41 +8,33 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { parseEther } from "ethers/lib/utils";
 
 export default async function (hre: HardhatRuntimeEnvironment) {
+  const provider = new Provider(hre.config.zkSyncDeploy.zkSyncNetwork);
 
   const wallet = new Wallet(
     "44a7366f976814652ae4f93dc262618373bb61a2df0dd07e1e22faf373ef55bf"
-  ).wallet.connect(provider);
+  ).connect(provider);
   // The two owners of the multisig
   const owner1 = Wallet.createRandom();
   const owner2 = Wallet.createRandom();
   const factoryArtifact = await hre.artifacts.readArtifact("ProofOfMeet");
 
-  const FACTORY_ADDRESS = "0x3bF094000048eBfBD867a69D705991ff12349741"
-  const aaFactory = new ethers.Contract(FACTORY_ADDRESS, factoryArtifact.abi, wallet);
+  const FACTORY_ADDRESS = "0x3bF094000048eBfBD867a69D705991ff12349741";
+  const aaFactory = new ethers.Contract(
+    FACTORY_ADDRESS,
+    factoryArtifact.abi,
+    wallet
+  );
 
   // For the simplicity of the example, we will use zero hash as salt
   const salt = ethers.constants.HashZero;
 
   // deploys multisig for owner1 and owner2
-  const tx = await aaFactory.deployAccount(salt, owner1.address, owner2.address); //todo maybe mudar para wallet1
-  await tx.wait();
-
-  await (
-    await wallet.sendTransaction({
-      to: multisigAddress,
-      // You can increase the amount of ETH sent to the multisig
-      value: ethers.utils.parseEther("0.001"),
-    })
-  ).wait();
-  console.log("2");
-
-  let aaTx = await aaFactory.populateTransaction.meet(
+  const tx = await aaFactory.deployAccount(
     salt,
     owner1.address,
     owner2.address
-  );
-
-  console.log("3");
+  ); //todo maybe mudar para wallet1
+  await tx.wait();
 
   const abiCoder = new ethers.utils.AbiCoder();
   const multisigAddress = utils.create2Address(
@@ -51,6 +43,24 @@ export default async function (hre: HardhatRuntimeEnvironment) {
     salt,
     abiCoder.encode(["address", "address"], [owner1.address, owner2.address])
   );
+
+  await (
+    await wallet.sendTransaction({
+      to: multisigAddress,
+      // You can increase the amount of ETH sent to the multisig
+      value: ethers.utils.parseEther("0.001"),
+    })
+  ).wait();
+
+  console.log("2");
+
+  let aaTx = await aaFactory.populateTransaction.meet(
+    owner2.address,
+    undefined
+  );
+
+  console.log("3");
+
   console.log(`Multisig deployed on address ${multisigAddress}`);
 
   const gasLimit = await provider.estimateGas(aaTx);
@@ -68,7 +78,7 @@ export default async function (hre: HardhatRuntimeEnvironment) {
     type: 113,
     customData: {
       ergsPerPubdata: utils.DEFAULT_ERGS_PER_PUBDATA_LIMIT,
-      metadata:  metadata,
+      metadata: metadata,
     } as types.Eip712Meta,
     value: ethers.BigNumber.from(0),
   };
