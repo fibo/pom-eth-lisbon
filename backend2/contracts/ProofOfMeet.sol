@@ -4,6 +4,7 @@ pragma solidity ^0.8.13;
 import '@matterlabs/zksync-contracts/l2/system-contracts/Constants.sol';
 import '@matterlabs/zksync-contracts/l2/system-contracts/SystemContractsCaller.sol';
 import "@matterlabs/zksync-contracts/l2/system-contracts/interfaces/IAccount.sol";
+import "hardhat/console.sol";
 
 contract ProofOfMeet {
   bytes32 public aaBytecodeHash;
@@ -14,21 +15,13 @@ contract ProofOfMeet {
   constructor(bytes32 _aaBytecodeHash) {
     aaBytecodeHash = _aaBytecodeHash;
   }
-  
-  function meet(address receiver, string calldata metadata) external {
-    bytes32 salt = bytes32(0);
 
-    address accountAddress = deployAccount(salt, msg.sender, receiver);
-    multiSigs[msg.sender][receiver] = IAccount(accountAddress);
-
-    emit Approved(msg.sender, receiver);
-  }
-
+  //TODO change to internal function , external for testing purposes
   function deployAccount(
     bytes32 salt,
     address owner1,
     address owner2
-  ) internal returns (address accountAddress) {
+  ) public returns (address accountAddress) {
     bytes memory returnData = SystemContractsCaller.systemCall(
       uint32(gasleft()),
       address(DEPLOYER_SYSTEM_CONTRACT),
@@ -41,4 +34,15 @@ contract ProofOfMeet {
 
     (accountAddress, ) = abi.decode(returnData, (address, bytes));
   }
+
+  function meet(address receiver, string calldata metadata) external {
+    bytes32 salt = bytes32(0);
+
+    address accountAddress = deployAccount(salt, msg.sender, receiver);
+    multiSigs[msg.sender][receiver] = IAccount(accountAddress);
+
+    emit Approved(msg.sender, receiver);
+  }
+
+  
 }
