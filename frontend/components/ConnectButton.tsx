@@ -21,6 +21,8 @@ export const ConnectButton: FC = () => {
     open()
   }, [isConnected, isConnecting, open])
 
+  if (account.isConnected) return null
+
   return (
     <button className={styles.callToAction} hidden={hidden} onClick={onClick}>
       <span>Connect Wallet</span>
