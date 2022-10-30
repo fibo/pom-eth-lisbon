@@ -25,16 +25,15 @@ const CreatePage = () => {
   const ipfsRef = useRef(null)
   const qrcodeDivRef = useRef(null)
 
-  const [locationText, setLocationText] = useState()
+  // const [locationText, setLocationText] = useState()
+  const locationText = 'POM'
   const [showQrCode, setShowQrCode] = useState(false)
   const [showLocation, setShowLocation] = useState(true)
   const [showTakeSelfie, setShowTakeSelfie] = useState(false)
   const [hasImage, setHasImage] = useState(false)
   const [emojiIsCorrect, setEmojiIsCorrect] = useState()
-  console.log("emojiIsCorrect", emojiIsCorrect)
   const [uploadedImage, setUploadedImage] = useState(null)
   const [randomEmojiKey, setRandomEmojiKey] = useState(null)
-  console.log("uploadedImage", uploadedImage)
 
   const onClickNext = useCallback(() => {
     if (showLocation) {
@@ -135,12 +134,12 @@ const CreatePage = () => {
     }
   }, [emojiIsCorrect, showLocation, showQrCode, hasImage])
 
-  const onChangeInput = useCallback(
-    (event) => {
-      setLocationText(event.target.value)
-    },
-    [setLocationText]
-  )
+  // const onChangeInput = useCallback(
+  //   (event) => {
+  //     setLocationText(event.target.value)
+  //   },
+  //   [setLocationText]
+  // )
 
   const takePhotoButtonIsHidden = useMemo(() => {
     if (hasImage) return true
@@ -222,7 +221,6 @@ const CreatePage = () => {
             <p className={styles.subLabel}>{subLabelText}</p>
             {showLocation && (
               <input
-                onChange={onChangeInput}
                 className={styles.placeInput}
                 type="text"
                 placeholder="Event, location"
