@@ -1,3 +1,4 @@
+import { useConnectModal, useAccount } from "@web3modal/react"
 import { create, CID } from "ipfs-http-client"
 import { nanoid } from "nanoid"
 import qrcode from "qrcode-generator"
@@ -7,16 +8,24 @@ import { useEmojis } from "../hooks/useEmojis"
 import { usePusher } from "../hooks/usePusher"
 import imageStyles from "../styles/image.module.css"
 import styles from "../styles/CreatePage.module.css"
+import homeStyles from "../styles/HomePage.module.css"
 
 const INFURA_PROJECTID = process.env.NEXT_PUBLIC_INFURA_PROJECTID
 const INFURA_APISECRET = process.env.NEXT_PUBLIC_INFURA_APISECRET
 
-const channelName = 'channel' // nanoid()
-console.log(channelName)
 const now = Date.now()
 
 const CreatePage = () => {
   const { emoji } = useEmojis()
+  const { open } = useConnectModal()
+
+  const { account } = useAccount()
+  // const channelName = 'channel' // nanoid()
+  const { address: channelName, isConnected, isConnecting } = useMemo(
+    () => account,
+    [account]
+  )
+  console.log("channelName", channelName)
 
   const { channel, pushMessage } = usePusher(channelName)
 
@@ -26,7 +35,7 @@ const CreatePage = () => {
   const qrcodeDivRef = useRef(null)
 
   // const [locationText, setLocationText] = useState()
-  const locationText = 'POM'
+  const locationText = "POM"
   const [showQrCode, setShowQrCode] = useState(false)
   const [showLocation, setShowLocation] = useState(true)
   const [showTakeSelfie, setShowTakeSelfie] = useState(false)
@@ -140,6 +149,12 @@ const CreatePage = () => {
   //   },
   //   [setLocationText]
   // )
+
+  const onClick = useCallback(() => {
+    if (isConnected) return
+    if (isConnecting) return
+    open()
+  }, [isConnected, isConnecting, open])
 
   const takePhotoButtonIsHidden = useMemo(() => {
     if (hasImage) return true
@@ -284,9 +299,17 @@ const CreatePage = () => {
             ></div>
           </form>
 
-          {buttonText && (
-            <button className={styles.next} onClick={onClickNext}>
-              {buttonText}
+          {channelName ? (
+            <>
+              {buttonText && (
+                <button className={styles.next} onClick={onClickNext}>
+                  {buttonText}
+                </button>
+              )}
+            </>
+          ) : (
+            <button className={homeStyles.callToAction} onClick={onClick}>
+              <span>Connect Wallet</span>
             </button>
           )}
         </div>

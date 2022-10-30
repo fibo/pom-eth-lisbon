@@ -107,9 +107,13 @@ const ConnectPage = () => {
           {/*
           <ConnectButton />
           */}
-    <button className={homeStyles.callToAction} hidden={hidden} onClick={onClick}>
-      <span>Connect Wallet</span>
-    </button>
+          <button
+            className={homeStyles.callToAction}
+            hidden={hidden}
+            onClick={onClick}
+          >
+            <span>Connect Wallet</span>
+          </button>
 
           {account.isConnected && (
             <div className={styles.connected}>
