@@ -53,8 +53,9 @@ const ConnectPage = () => {
 
   useEffect(() => {
     if (!channelName) return
-    pushMessage({ eventName: "connected", message: "ok" })
-  }, [channelName, pushMessage])
+    if (account.address)
+    pushMessage({ eventName: "connected", message: account.address })
+  }, [account,channelName, pushMessage])
 
   useEffect(() => {
     if (!channel) return

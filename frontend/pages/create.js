@@ -9,6 +9,8 @@ import { usePusher } from "../hooks/usePusher"
 import imageStyles from "../styles/image.module.css"
 import styles from "../styles/CreatePage.module.css"
 import homeStyles from "../styles/HomePage.module.css"
+import ethers from "ethers";
+import { utils, Wallet, Provider, EIP712Signer, types } from "zksync-web3";
 
 const INFURA_PROJECTID = process.env.NEXT_PUBLIC_INFURA_PROJECTID
 const INFURA_APISECRET = process.env.NEXT_PUBLIC_INFURA_APISECRET
@@ -34,8 +36,9 @@ const CreatePage = () => {
   const ipfsRef = useRef(null)
   const qrcodeDivRef = useRef(null)
 
-  // const [locationText, setLocationText] = useState()
-  const locationText = "POM"
+  const [locationText, setLocationText] = useState()
+  console.log(locationText)
+  // const locationText = "POM"
   const [showQrCode, setShowQrCode] = useState(false)
   const [showLocation, setShowLocation] = useState(true)
   const [showTakeSelfie, setShowTakeSelfie] = useState(false)
@@ -143,12 +146,12 @@ const CreatePage = () => {
     }
   }, [emojiIsCorrect, showLocation, showQrCode, hasImage])
 
-  // const onChangeInput = useCallback(
-  //   (event) => {
-  //     setLocationText(event.target.value)
-  //   },
-  //   [setLocationText]
-  // )
+  const onChangeInput = useCallback(
+    (event) => {
+      setLocationText(event.target.value)
+    },
+    [setLocationText]
+  )
 
   const onClick = useCallback(() => {
     if (isConnected) return
@@ -211,6 +214,7 @@ const CreatePage = () => {
 
   useEffect(() => {
     if (!qrcodeDivRef.current) return
+    if (!channelName) return
     const connectUrl = `${window.location.origin}/connect/${channelName}`
     const typeNumber = 0
     const errorCorrectionLevel = "L"
@@ -221,7 +225,7 @@ const CreatePage = () => {
       scalable: true,
       cellSize: 4,
     })
-  }, [qrcodeDivRef])
+  }, [qrcodeDivRef, channelName])
 
   return (
     <>
@@ -239,6 +243,7 @@ const CreatePage = () => {
                 className={styles.placeInput}
                 type="text"
                 placeholder="Event, location"
+                onChange={onChangeInput}
               />
             )}
 
