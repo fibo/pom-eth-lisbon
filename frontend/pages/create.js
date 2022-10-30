@@ -27,6 +27,7 @@ const CreatePage = () => {
 
   const [showQrCode, setShowQrCode] = useState(false)
   const [showLocation, setShowLocation] = useState(true)
+  const [showTakeSelfie, setShowTakeSelfie] = useState(false)
   const [hasImage, setHasImage] = useState(false)
   const [emojiIsCorrect, setEmojiIsCorrect] = useState()
   console.log("emojiIsCorrect", emojiIsCorrect)
@@ -36,22 +37,31 @@ const CreatePage = () => {
 
   const onClickNext = useCallback(() => {
     if (showLocation) {
-    setShowLocation(false)
-    setShowQrCode(true)
+      setShowLocation(false)
+      setShowQrCode(true)
       return
     }
     if (showQrCode) {
-    setShowQrCode(false)
-    const inputFile = inputFileRef.current
-    if (!inputFile) return
-    inputFile.click()
+      setShowQrCode(false)
     }
-  },[
+    if (hasImage) {
+      setShowTakeSelfie(false)
+    }
+    if (showTakeSelfie) {
+      const inputFile = inputFileRef.current
+      if (!inputFile) return
+      inputFile.click()
+    }
+  }, [
     inputFileRef,
+    hasImage,
     showLocation,
     showQrCode,
+    showTakeSelfie,
+    setShowTakeSelfie,
     setShowQrCode,
-     setShowLocation])
+    setShowLocation,
+  ])
 
   const onChangeImage = useCallback(
     async (event) => {
@@ -64,42 +74,56 @@ const CreatePage = () => {
         const file = files[0]
         imagePreview.src = URL.createObjectURL(file)
         setHasImage(true)
+        setShowTakeSelfie(false)
         const ipfsImage = await ipfs.add(file)
         setUploadedImage({ cid: ipfsImage.cid, path: ipfsImage.path })
       }
     },
-    [imagePreviewRef, ipfsRef, setHasImage, setUploadedImage]
+    [imagePreviewRef, ipfsRef, setHasImage, setShowTakeSelfie, setUploadedImage]
   )
 
-  const {completed, labelText, subLabelText, buttonText} = useMemo(() => {
-    if (showLocation) return {
-       completed: 25,
-      buttonText: 'Generate QR code',
-      labelText: 'Where are you at?',
-      subLabelText: "Tell us where you are right now to adequately describe your Proof of Meet"
-    }
+  const { completed, labelText, subLabelText, buttonText } = useMemo(() => {
+    if (showLocation)
+      return {
+        completed: 20,
+        buttonText: "Generate QR code",
+        labelText: "Where are you at?",
+        subLabelText:
+          "Tell us where you are right now to adequately describe your Proof of Meet",
+      }
 
-    if (showQrCode) return {
-       completed: 50,
-      buttonText: 'Take selfie',
-      labelText: 'Show this code to your new connection',
-      subLabelText: "Scan QR code with the regular camera, or use a WalletConnect-compatible wallet"
-    }
+    if (showQrCode)
+      return {
+        completed: 40,
+        buttonText: "",
+        labelText: "Show this code to your new connection",
+        subLabelText:
+          "Scan QR code with the regular camera, or use a WalletConnect-compatible wallet",
+      }
 
-    if (hasImage) return {
-       completed: 75,
-      labelText: '',
-      labelText: 'Show this code to your connection',
-      subLabelText: "This step is to ensure you both consent"
-    }
+    if (showTakeSelfie)
+      return {
+        completed: 60,
+        buttonText: "Take selfie",
+        labelText: "Take a picture together",
+        subLabelText: "Smile, it’s gonna live on forever!",
+      }
 
-     return {
-       completed: 0,
-      buttonText: '',
-      labelText: '',
-      subLabelText: ""
+    if (hasImage)
+      return {
+        completed: 80,
+        labelText: "",
+        labelText: "Show this code to your connection",
+        subLabelText: "This step is to ensure you both consent",
+      }
+
+    return {
+      completed: 0,
+      buttonText: "",
+      labelText: "",
+      subLabelText: "",
     }
-  }, [showLocation, showQrCode,hasImage])
+  }, [showLocation, showQrCode, hasImage])
 
   const takePhotoButtonIsHidden = useMemo(() => {
     if (hasImage) return true
@@ -110,11 +134,18 @@ const CreatePage = () => {
     event.preventDefault()
   }, [])
 
-
   useEffect(() => {
     const emojiKeys = Object.keys(emoji)
     setRandomEmojiKey(emojiKeys[now % emojiKeys.length])
   }, [emoji, setRandomEmojiKey])
+
+  useEffect(() => {
+    if (!channel) return
+    channel.bind("connected", () => {
+      setShowQrCode(false)
+      setShowTakeSelfie(true)
+    })
+  }, [channel, setShowQrCode, setShowTakeSelfie])
 
   useEffect(() => {
     if (!channel) return
@@ -160,55 +191,56 @@ const CreatePage = () => {
       <ProgressBar completed={completed} />
 
       <div className={styles.background}>
-      <div className={styles.container}>
-        <form className={styles.imageForm} onSubmit={onSubmitImage}>
-          <label className={styles.label} htmlFor="place">
-            {labelText}
-          </label>
-          <p className={styles.subLabel}>
-            {subLabelText}
-          </p>
-          {showLocation && (
-          <input
-            className={styles.placeInput}
-            type="text"
-            placeholder="Event, location"
-          />
+        <div className={styles.container}>
+          <form className={styles.imageForm} onSubmit={onSubmitImage}>
+            <label className={styles.label} htmlFor="place">
+              {labelText}
+            </label>
+            <p className={styles.subLabel}>{subLabelText}</p>
+            {showLocation && (
+              <input
+                className={styles.placeInput}
+                type="text"
+                placeholder="Event, location"
+              />
+            )}
+
+            <input
+              ref={inputFileRef}
+              type="file"
+              accept="image/*"
+              capture
+              onChange={onChangeImage}
+              hidden
+            />
+
+            {hasImage && (
+              <div className={styles.connectionCode}>
+                <div className={styles.emojiContainer}>
+                  <div className={styles.emoji}>{emoji[randomEmojiKey]}</div>
+                </div>
+              </div>
+            )}
+
+            <img
+              ref={imagePreviewRef}
+              hidden={!hasImage}
+              className={imageStyles.preview}
+            />
+
+            <div
+              ref={qrcodeDivRef}
+              className={styles.qrcodeContainer}
+              hidden={!showQrCode}
+            ></div>
+          </form>
+
+          {buttonText && (
+            <button className={styles.next} onClick={onClickNext}>
+              {buttonText}
+            </button>
           )}
-
-          <input
-            ref={inputFileRef}
-            type="file"
-            accept="image/*"
-            capture
-            onChange={onChangeImage}
-            hidden
-          />
-
-
-    {hasImage && (
-        <div  className={styles.connectionCode}>
-
-          <div className={styles.emojiContainer}>
-            <div className={styles.emoji}>{emoji[randomEmojiKey]}</div>
-          </div>
         </div>
-    )}
-
-        <img
-          ref={imagePreviewRef}
-          hidden={!hasImage}
-          className={imageStyles.preview}
-        />
-
-        </form>
-
-        <div ref={qrcodeDivRef} className={styles.qrcodeContainer} hidden={!showQrCode}></div>
-
-    {buttonText &&(
-        <button className={styles.next} onClick={onClickNext}>{buttonText}</button>
-    )}
-      </div>
       </div>
     </>
   )
