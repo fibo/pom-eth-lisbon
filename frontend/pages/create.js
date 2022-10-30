@@ -2,7 +2,7 @@ import { create, CID } from "ipfs-http-client"
 import { nanoid } from "nanoid"
 import qrcode from "qrcode-generator"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { ProgressBar } from "_components"
+import { Spinner, ProgressBar } from "_components"
 import { useEmojis } from "../hooks/useEmojis"
 import { usePusher } from "../hooks/usePusher"
 import imageStyles from "../styles/image.module.css"
@@ -18,13 +18,14 @@ const now = Date.now()
 const CreatePage = () => {
   const { emoji } = useEmojis()
 
-  const { channel } = usePusher(channelName)
+  const { channel, pushMessage } = usePusher(channelName)
 
   const imagePreviewRef = useRef(null)
   const inputFileRef = useRef(null)
   const ipfsRef = useRef(null)
   const qrcodeDivRef = useRef(null)
 
+  const [locationText, setLocationText] = useState()
   const [showQrCode, setShowQrCode] = useState(false)
   const [showLocation, setShowLocation] = useState(true)
   const [showTakeSelfie, setShowTakeSelfie] = useState(false)
@@ -109,6 +110,15 @@ const CreatePage = () => {
         subLabelText: "Smile, it’s gonna live on forever!",
       }
 
+    if (emojiIsCorrect)
+      return {
+        completed: 100,
+        buttonText: "We're ready to publish",
+        labelText: "Code confirmed!",
+        subLabelText:
+          "This is the last step. Please double-check the info below is correct",
+      }
+
     if (hasImage)
       return {
         completed: 80,
@@ -123,7 +133,14 @@ const CreatePage = () => {
       labelText: "",
       subLabelText: "",
     }
-  }, [showLocation, showQrCode, hasImage])
+  }, [emojiIsCorrect, showLocation, showQrCode, hasImage])
+
+  const onChangeInput = useCallback(
+    (event) => {
+      setLocationText(event.target.value)
+    },
+    [setLocationText]
+  )
 
   const takePhotoButtonIsHidden = useMemo(() => {
     if (hasImage) return true
@@ -133,6 +150,12 @@ const CreatePage = () => {
   const onSubmitImage = useCallback((event) => {
     event.preventDefault()
   }, [])
+
+  useEffect(() => {
+    if (!channelName) return
+    if (!hasImage) return
+    pushMessage({ eventName: "image", message: "ok" })
+  }, [channelName, pushMessage, hasImage])
 
   useEffect(() => {
     const emojiKeys = Object.keys(emoji)
@@ -199,6 +222,7 @@ const CreatePage = () => {
             <p className={styles.subLabel}>{subLabelText}</p>
             {showLocation && (
               <input
+                onChange={onChangeInput}
                 className={styles.placeInput}
                 type="text"
                 placeholder="Event, location"
@@ -216,10 +240,27 @@ const CreatePage = () => {
 
             {hasImage && (
               <div className={styles.connectionCode}>
-                <div className={styles.emojiContainer}>
+                <div
+                  className={`${styles.emojiContainer} ${
+                    emojiIsCorrect ? styles.emojiIsCorrect : ""
+                  }`}
+                >
                   <div className={styles.emoji}>{emoji[randomEmojiKey]}</div>
                 </div>
               </div>
+            )}
+
+            {hasImage && (
+              <>
+                {emojiIsCorrect ? null : (
+                  <div className={styles.waiting}>
+                    <Spinner />
+                    <div className={styles.subLabel}>
+                      waiting for your connection to confirm…
+                    </div>
+                  </div>
+                )}
+              </>
             )}
 
             <img
@@ -227,6 +268,16 @@ const CreatePage = () => {
               hidden={!hasImage}
               className={imageStyles.preview}
             />
+
+            {emojiIsCorrect && (
+              <div>
+                <span className={styles.message}>{locationText}</span>
+                <br />
+                <span className={styles.timestamp}>
+                  {new Date(now).toLocaleString()}
+                </span>
+              </div>
+            )}
 
             <div
               ref={qrcodeDivRef}
