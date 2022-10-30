@@ -63,6 +63,7 @@ const ConnectPage = () => {
     })
   }, [channel, setHasImage])
 
+  console.log(emojiKey)
   useEffect(() => {
     if (!channelName) return
     if (!emojiKey) return

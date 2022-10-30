@@ -11,7 +11,7 @@ import styles from "../styles/CreatePage.module.css"
 const INFURA_PROJECTID = process.env.NEXT_PUBLIC_INFURA_PROJECTID
 const INFURA_APISECRET = process.env.NEXT_PUBLIC_INFURA_APISECRET
 
-const channelName = nanoid()
+const channelName = 'channel' // nanoid()
 console.log(channelName)
 const now = Date.now()
 
