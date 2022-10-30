@@ -35,7 +35,7 @@ contract ProofOfMeet {
     (accountAddress, ) = abi.decode(returnData, (address, bytes));
 
     IAccount multisig = IAccount(accountAddress);
-    multiSigs[msg.sender][receiver] = multisig;
+    multiSigs[msg.sender][owner2] = multisig;
   }
 
   /* function meet(address receiver, Transaction calldata transaction) external { */
