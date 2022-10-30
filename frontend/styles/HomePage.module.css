@@ -1,25 +1,55 @@
-.container{
-  display:flex;
+.container {
+  display: flex;
   flex-direction: column;
-  border:1px solid;
+  border: 1px solid;
   height: 100vh;
   justify-content: space-between;
 }
 
+.logo {
+  padding-inline: 1em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: white;
+  height: fit-content;
+  width: 100%;
+  gap: 1em;
+}
+
+.title {
+  color: black;
+  font-size: 1.75em;
+  font-weight: bold;
+}
+
 .hero {
-  background: linear-gradient(171deg, rgb(189 96 208) 17%, rgb(252 244 255) 71%);
+  background: linear-gradient(
+    171deg,
+    rgb(189 96 208) 17%,
+    rgb(252 244 255) 71%
+  );
+  padding-block: 3em;
   padding-inline: 1.7em;
-  display:flex;
+  display: flex;
   flex-direction: column;
   text-align: center;
-  justify-content: space-around;
+  justify-content: space-between;
   height: 100%;
 }
 
 .heroText {
+  margin-block: 0;
   font-size: 3em;
   color: white;
   font-weight: bold;
+}
+
+.heroSubText {
+  margin-top: 2em;
+  color: black;
+  font-size: 1.2em;
+  line-height: 1.7em;
 }
 
 .callToAction {
@@ -29,8 +59,9 @@
   line-height: 3em;
   text-decoration: none;
   border-radius: 2em;
-  background-color: rgb(236,0,118);
+  background-color: #f20089;
   color: white;
+  margin-bottom: 3em;
 }
 
 .footer {
@@ -38,4 +69,5 @@
   padding-inline: 1em;
   background-color: rgb(242, 245, 245);
   text-align: center;
+  color: gray;
 }
