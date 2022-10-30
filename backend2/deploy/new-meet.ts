@@ -44,6 +44,8 @@ export default async function (hre: HardhatRuntimeEnvironment) {
     abiCoder.encode(["address", "address"], [owner1.address, owner2.address])
   );
 
+  console.log("2");
+
   await (
     await wallet.sendTransaction({
       to: multisigAddress,
@@ -52,16 +54,15 @@ export default async function (hre: HardhatRuntimeEnvironment) {
     })
   ).wait();
 
-  console.log("2");
-
-  let aaTx = await aaFactory.populateTransaction.meet(
-    owner2.address,
-    undefined
-  );
-
   console.log("3");
 
   console.log(`Multisig deployed on address ${multisigAddress}`);
+
+  let aaTx = await aaFactory.populateTransaction.deployAccount(
+      salt,
+      owner1.address,
+      owner2.address
+  );
 
   const gasLimit = await provider.estimateGas(aaTx);
   const gasPrice = await provider.getGasPrice();

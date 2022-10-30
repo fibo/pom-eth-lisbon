@@ -17,7 +17,6 @@ contract ProofOfMeet {
     aaBytecodeHash = _aaBytecodeHash;
   }
 
-  //TODO change to internal function , external for testing purposes
   function deployAccount(
     bytes32 salt,
     address owner1,
@@ -34,20 +33,23 @@ contract ProofOfMeet {
     );
 
     (accountAddress, ) = abi.decode(returnData, (address, bytes));
-  }
 
-  function meet(address receiver, Transaction calldata transaction) external {
-    bytes32 salt = bytes32(0);
-
-    address multisigAddress = deployAccount(salt, msg.sender, receiver);
-    IAccount multisig = IAccount(multisigAddress);
+    IAccount multisig = IAccount(accountAddress);
     multiSigs[msg.sender][receiver] = multisig;
-
-    multisig.executeTransactionFromOutside(transaction);
-
-    //TODO maybe emit metadata as well
-    emit Approved(msg.sender, receiver);
   }
+
+  /* function meet(address receiver, Transaction calldata transaction) external { */
+  /*   bytes32 salt = bytes32(0); */
+
+  /*   address multisigAddress = deployAccount(salt, msg.sender, receiver); */
+  /*   IAccount multisig = IAccount(multisigAddress); */
+  /*   multiSigs[msg.sender][receiver] = multisig; */
+
+  /*   multisig.executeTransactionFromOutside(transaction); */
+
+  /*   //TODO maybe emit metadata as well */
+  /*   emit Approved(msg.sender, receiver); */
+  /* } */
 
   
 }
