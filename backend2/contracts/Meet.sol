@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 contract Meet {
-  string metadata;//check visibility chosen by the users
+  string metadata;//TODO check visibility chosen by the users
   
   //check visibility to make the connections available to mutual connections 
   address owner1;
@@ -19,8 +19,9 @@ contract Meet {
     _;
   }
 
-  //check if the input message sender is correct for this modifier verification
+  //TODO check if the input message sender is correct for this modifier verification
   function getMetadata() external view isOwner(msg.sender) returns (string memory){
     return metadata;
   }
+
 }

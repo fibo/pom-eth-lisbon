@@ -4,6 +4,7 @@ pragma solidity ^0.8.13;
 import '@matterlabs/zksync-contracts/l2/system-contracts/Constants.sol';
 import '@matterlabs/zksync-contracts/l2/system-contracts/SystemContractsCaller.sol';
 import "@matterlabs/zksync-contracts/l2/system-contracts/interfaces/IAccount.sol";
+import "@matterlabs/zksync-contracts/l2/system-contracts/TransactionHelper.sol";
 import "hardhat/console.sol";
 
 contract ProofOfMeet {
@@ -35,19 +36,16 @@ contract ProofOfMeet {
     (accountAddress, ) = abi.decode(returnData, (address, bytes));
   }
 
-  function meet(address receiver, string calldata metadata) external {
+  function meet(address receiver, Transaction calldata transaction) external {
     bytes32 salt = bytes32(0);
 
-    address accountAddress = deployAccount(salt, msg.sender, receiver);
-    IAccount multisig = IAccount(accountAddress);
+    address multisigAddress = deployAccount(salt, msg.sender, receiver);
+    IAccount multisig = IAccount(multisigAddress);
     multiSigs[msg.sender][receiver] = multisig;
 
-    //TODO tell multisig to mint Meet.sol 
-    //TODO send metadata to it
-    //TODO maybe we have to also include in the calldata signature
-    bytes32 toCallMint = abi.encode("data to call mint Meet.sol");
-    multisig.executeTransaction(toCallMint);
+    multisig.executeTransactionFromOutside(transaction);
 
+    //TODO maybe emit metadata as well
     emit Approved(msg.sender, receiver);
   }
 

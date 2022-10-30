@@ -8,6 +8,7 @@ import "@matterlabs/zksync-contracts/l2/system-contracts/Constants.sol";
 import "@matterlabs/zksync-contracts/l2/system-contracts/TransactionHelper.sol";
 import "@matterlabs/zksync-contracts/l2/system-contracts/interfaces/IAccount.sol";
 import "@matterlabs/zksync-contracts/l2/system-contracts/SystemContractsCaller.sol";
+import "./Meet.sol";
 
 contract TwoUserMultisig is IAccount, IERC1271 {
     
@@ -15,6 +16,9 @@ contract TwoUserMultisig is IAccount, IERC1271 {
 
     address public owner1;
     address public owner2;
+
+    //made public so that the metadata can be shown
+    Meet public pom;
 
     bytes4 constant EIP1271_SUCCESS_RETURN_VALUE = 0x1626ba7e;
 
@@ -77,27 +81,8 @@ contract TwoUserMultisig is IAccount, IERC1271 {
     }
 
     function _executeTransaction(Transaction calldata _transaction) internal {
-        address to = address(uint160(_transaction.to));
-        uint256 value = _transaction.reserved[1]; // TODO Value might always be 0
-        bytes memory data = _transaction.data;
-
-        //TODO maybe we won't need to allow call contract deployer with calldata
-        if(to == address(DEPLOYER_SYSTEM_CONTRACT)) {
-            SystemContractsCaller.systemCall(
-                uint32(gasleft()),
-                to, 
-                uint128(_transaction.reserved[1]),
-                _transaction.data
-            );
-        } else {
-            bool success;
-            assembly {
-                success := call(
-                    gas(), to, value, add(data, 0x20), mload(data), 0, 0
-                )
-            }
-            require(success);
-        }
+        (uint256 _a, string memory metadata) = abi.decode(_transaction.data, (uint256, string));
+        pom = new Meet(owner1, owner2, metadata);
     }
 
     function executeTransactionFromOutside(Transaction calldata _transaction)
