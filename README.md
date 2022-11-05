@@ -20,6 +20,7 @@ Just as a nation is sovereign, meaning that nothing can take away its right to e
 
 Users will have the option to upload a picture of their “meet”, log a location, and either make a POM private or publicly visible. By creating a POM, individuals will be able to truly own their data, moving one step further to achieving the system-wide imposition of self-sovereign identities (SSI).
 
-<!--
-[Workflow](https://whimsical.com/pom-flow-3G2mov7m4Aq7z2RZ1bVzwY)
--->
+
+[User flow](https://whimsical.com/pom-flow-3G2mov7m4Aq7z2RZ1bVzwY)
+![Design (overview)](https://user-images.githubusercontent.com/2742107/200131255-b758de3d-c257-4193-982a-8fba96c5d2ac.png)
+![Design (detail)](https://user-images.githubusercontent.com/2742107/200131256-93905816-4781-45f3-a9f8-a710afd0f363.png)
